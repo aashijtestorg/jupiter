@@ -1,0 +1,19 @@
+name: Docker push container at org level (PAT_TOKEN)
+on: push
+
+permissions:
+ packages: write
+
+jobs:
+ all:
+  runs-on: ubuntu-latest
+  
+  steps:
+   - name: Login to GitHub container Registry
+     run: echo ${{ secrets.PAT_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+   - name: Build the Docker image
+     run: docker pull crux:latest
+   - name: tag the Docker image
+     run: docker tag crux:latest ghcr.io/aashijtestorg/crux:latest
+   - name: Push the Docker image to the registry
+     run: docker push ghcr.io/aashijtestorg/crux:latest
